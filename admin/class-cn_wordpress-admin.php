@@ -78,6 +78,8 @@ class cn_wordpress_Admin {
 
 		// Add an action link pointing to the options page.
 		$plugin_basename = plugin_basename( plugin_dir_path( realpath( dirname( __FILE__ ) ) ) . $this->plugin_slug . '.php' );
+        //Load Includes
+        include( plugin_dir_path( __FILE__ ) . 'includes/index.php');
 		add_filter( 'plugin_action_links_' . $plugin_basename, array( $this, 'add_action_links' ) );
 
 		/*
@@ -86,7 +88,8 @@ class cn_wordpress_Admin {
 		 * Read more about actions and filters:
 		 * http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		 */
-		add_action( '@TODO', array( $this, 'action_method_name' ) );
+		add_action ( 'edit_form_advanced', array( $this, 'advanced_add_api_input'));
+        add_action ( 'save_post', array( $this, 'save_post_api'));
 		add_filter( '@TODO', array( $this, 'filter_method_name' ) );
 
 	}
@@ -230,9 +233,132 @@ class cn_wordpress_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function action_method_name() {
-		// @TODO: Define your action hook callback here
-	}
+    public static function advanced_add_api_input() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . "cn_wordpress"; 
+        $api_url = "";
+
+        $post_id = isset($GLOBALS['post_ID']) ? (int) $GLOBALS['post_ID'] : 0;
+        $row = $wpdb->get_row("SELECT * FROM $table_name WHERE post = $post_id");
+        if (NULL !== $row) {
+            $api_url = $row->url;
+        }
+        echo '<style>',"\n";
+        echo '.input {display: block;}', "\n";
+        echo '.input span {
+              position: absolute;
+              z-index: 1;
+              cursor: text;
+              pointer-events: none;
+              /* Input padding + input border */
+              /* Firefox does not respond well to different line heights. Use padding instead. */
+              line-height: 1.4em;
+              font-family: sans-serif;
+              /* This gives a little gap between the cursor and the label */
+              margin-left: 2px;
+              font-size: 1.7em;
+              padding: 11px 10px;
+              vertical-align: middle;
+              color: #bbb;
+            }', "\n";
+        echo '.input input, .input textarea, .input select {
+              background-color: #fff;
+              z-index: 0;
+              padding: 3px 8px;
+              margin: 1px 0;
+              height: 1.7em;
+              font: inherit;
+              font-family: sans-serif;
+              font-size: 1.7em;
+              line-height: 100%;
+              width: 100%;
+              outline: 0;
+              border-radius: 3px;
+              border-width: 1px;
+              border-style: solid;
+            }', "\n";
+        echo '.input select {
+              padding: 5px;
+              height: 31px;
+            }', "\n";
+        echo '</style>',"\n";
+        echo '<div id="cn_api">',"\n";
+        echo '<label class="input" for="api_url"><span>API Recipe URL</span><input type="text" name="api_url" value="'. $api_url .'"  /></label>',"\n";
+        echo '</div>',"\n";
+        echo '<script>',"\n";
+        echo 'var placement = document.getElementById("titlewrap");',"\n";
+        echo 'var includediv = document.getElementById("cn_api");',"\n";
+        echo 'placement.parentNode.appendChild(includediv);',"\n";
+        echo "(function($) {
+                  function measureWidth(deflt) {
+                    var dummy = $('<label></label>').text(deflt).css('visibility','hidden').appendTo(document.body);
+                    var result = dummy.width();
+                    dummy.remove();
+                    return result;
+                  }
+
+                  function toggleLabel() {
+                    var input = $(this);
+                    var deflt = input.attr('title');
+                    var span = input.prev('span');
+                    setTimeout(function() {
+                      if (!input.val() || (input.val() == deflt)) {
+                        span.css('visibility', '');
+                        if (deflt) {
+                          span.css('margin-left', measureWidth(deflt) + 2 + 'px');
+                        }
+                      } else {
+                        span.css('visibility', 'hidden');
+                      }
+                    }, 0);
+                  };
+
+                  $(document).on('cut', 'input, textarea', toggleLabel);
+                  $(document).on('keydown', 'input, textarea', toggleLabel);
+                  $(document).on('paste', 'input, textarea', toggleLabel);
+                  $(document).on('change', 'select', toggleLabel);
+
+                  $(document).on('focusin', 'input, textarea', function() {
+                      $(this).prev('span').css('color', '#ccc');
+                  });
+                  $(document).on('focusout', 'input, textarea', function() {
+                      $(this).prev('span').css('color', '#999');
+                  });
+
+                  function init() {
+                    $('input, textarea, select').each(toggleLabel);
+                  };
+
+                  // Set things up as soon as the DOM is ready.
+                  $(init);
+
+                  // Do it again to detect Chrome autofill.
+                  $(window).load(function() {
+                    setTimeout(init, 0);
+                  });
+
+                })(jQuery);", "\n";
+        echo '</script>',"\n";
+    }
+    
+    public static function save_post_api($post_id) {
+        global $wpdb;
+        if (isset($_POST['api_url'])) {
+            $table_name = $wpdb->prefix . "cn_wordpress"; 
+            $api_url = $_POST['api_url'];
+            $row = $wpdb->get_row("SELECT * FROM $table_name WHERE post = $post_id");
+            if (NULL !== $row) {
+                $wpdb->update($table_name, 
+                           array('url' => $api_url), 
+                           array('post' => $post_id));
+            } else {
+                $wpdb->insert($table_name, 
+                           array('url' => $api_url, 
+                                 'post' => $post_id));
+            }
+        }
+    }
+ 
 
 	/**
 	 * NOTE:     Filters are points of execution in which WordPress modifies data
@@ -244,7 +370,7 @@ class cn_wordpress_Admin {
 	 * @since    1.0.0
 	 */
 	public function filter_method_name() {
-		// @TODO: Define your filter hook callback here
+
 	}
 
 }

@@ -21,6 +21,9 @@
  * @package cn_wordpress
  * @author  Jesse Greathouse <jesse.greathouse@gmail.com>
  */
+
+use cookingnutritious\CookingNutritiousClient\CookingNutritiousClient;
+
 class cn_wordpress {
 
 	/**
@@ -74,11 +77,14 @@ class cn_wordpress {
 		// Load public-facing style sheet and JavaScript.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+        
+        // Load Includes
+        include( plugin_dir_path( __FILE__ ) . 'includes/index.php');
 
 		/* Define custom functionality.
 		 * Refer To http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		 */
-		add_action( '@TODO', array( $this, 'action_method_name' ) );
+        add_action( 'the_post', array( $this, 'api_post_transform'));
 		add_filter( '@TODO', array( $this, 'filter_method_name' ) );
 
 	}
@@ -321,8 +327,17 @@ class cn_wordpress {
 	 *
 	 * @since    1.0.0
 	 */
-	public function action_method_name() {
-		// @TODO: Define your action hook callback here
+	function api_post_transform($post) {
+		global $wpdb;
+        $token = '35f4d181b311abb4a0b6b435cf47cdd663674708';
+        $post_id = $post->ID;
+        $table_name = $wpdb->prefix . "cn_wordpress";
+        $row = $wpdb->get_row("SELECT * FROM $table_name WHERE post = $post_id");
+        if (NULL !== $row) {
+            $api_url = $row->url;
+            $response = new CookingNutritiousClient($token, $api_url);
+            var_dump($response); die();
+        }
 	}
 
 	/**
