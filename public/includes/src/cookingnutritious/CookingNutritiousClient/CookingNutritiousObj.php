@@ -14,12 +14,16 @@ namespace cookingnutritious\CookingNutritiousClient;
 
 class CookingNutritiousObj
 {
-
-    protected $msg;
+    
+    protected $stat = null;
+    
+    protected $error;
 
     protected $code;
 
     protected $client;
+    
+    protected $response = null;
 
     public function getClient()
     {
@@ -43,14 +47,14 @@ class CookingNutritiousObj
         return $this;
     }
 
-    public function getMsg()
+    public function getError()
     {
-        return $this->msg;
+        return $this->error;
     }
 
-    public function setMsg($msg)
+    public function setError($error)
     {
-        $this->msg = $msg;
+        $this->error = $error;
         return $this;
     }
 
@@ -62,6 +66,17 @@ class CookingNutritiousObj
     public function setCode($code)
     {
         $this->code = $code;
+        return $this;
+    }
+ 
+    public function getResponse()
+    {
+        return $this->response;
+    }
+   
+    public function setResponse($response)
+    {
+        $this->response = $response;
         return $this;
     }
 

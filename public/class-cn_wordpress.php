@@ -84,7 +84,7 @@ class cn_wordpress {
 		/* Define custom functionality.
 		 * Refer To http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		 */
-        add_action( 'the_post', array( $this, 'api_post_transform'));
+        add_action( 'the_content', array( $this, 'api_content_transform'));
 		add_filter( '@TODO', array( $this, 'filter_method_name' ) );
 
 	}
@@ -327,18 +327,39 @@ class cn_wordpress {
 	 *
 	 * @since    1.0.0
 	 */
-	function api_post_transform($post) {
+	function api_content_transform($content) {
 		global $wpdb;
         $token = '35f4d181b311abb4a0b6b435cf47cdd663674708';
-        $post_id = $post->ID;
+        $post_id = $GLOBALS['post']->ID;
         $table_name = $wpdb->prefix . "cn_wordpress";
         $row = $wpdb->get_row("SELECT * FROM $table_name WHERE post = $post_id");
         if (NULL !== $row) {
             $api_url = $row->url;
-            $response = new CookingNutritiousClient($token, $api_url);
-            var_dump($response); die();
+            $client = new CookingNutritiousClient($token);
+            $cn = $client->requestGet($api_url);
+            if ($cn->getCode() == 200) {
+                $append_data = $this->compose_content_recipe($cn->getResponse());
+                $content .= $append_data;
+            }
         }
+        return $content;
 	}
+    
+    function compose_content_recipe($recipe)
+    {
+        $append_data = ''."\n";
+        $append_data .= '<div id="cn-recipe">'."\n";
+        $append_data .= '<div id="cn-recipe-instructions">'.$recipe->instructions.'</div>'."\n";
+        $append_data .= '<div id="cn-recipe-list">'."\n";
+        $append_data .= '<ul>'."\n";
+        foreach ($recipe->recipe_items as $ingredient) {
+            $append_data .= '<li>'.$ingredient.'</li>'."\n";
+        }
+        $append_data .= '</ul>'."\n";
+        $append_data .= '</div>'."\n";
+        $append_data .= '</div>'."\n";
+        return $append_data;
+    }
 
 	/**
 	 * NOTE:  Filters are points of execution in which WordPress modifies data
