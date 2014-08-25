@@ -19,6 +19,7 @@ class CookingNutritiousTools
     {
         return array(
             'servings',
+            'serving_size',
             'calories',
             'calories_from_fat',
             'total_fat',

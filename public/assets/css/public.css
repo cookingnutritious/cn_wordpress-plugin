@@ -5,6 +5,24 @@ div#cn-recipe-info {
   width: 35%;
 }
 
+div#cn-recipe-instructions {
+  color: #000;
+}
+
+div#cn-recipe-instructions p {
+  color: #000;
+  padding: 5px 5px 5px 15px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+
+  background: #eeeeee;
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+#left-area .post #cn-recipe-list ul li {
+  color: #000000;
+}
+
 div#cn-recipe-nutrition {
   
 }

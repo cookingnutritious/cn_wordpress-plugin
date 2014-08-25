@@ -351,14 +351,17 @@ class cn_wordpress {
         $append_data = ''."\n";
         $append_data .= '<div id="cn-recipe">'."\n";
         $append_data .= '<div id="cn-recipe-info">'."\n";
-        $append_data .= '<div id="cn-recipe-instructions">'.$recipe->instructions.'</div>'."\n";
         $append_data .= '<div id="cn-recipe-list">'."\n";
+        $append_data .= '<h2>Ingredients:</h2>'."\n";
         $append_data .= '<ul>'."\n";
         foreach ($recipe->recipe_items as $ingredient) {
             $append_data .= '<li>'.$ingredient.'</li>'."\n";
         }
         $append_data .= '</ul>'."\n";
         $append_data .= '</div>'."\n";
+        $append_data .= '<div id="cn-recipe-instructions">'."\n";
+        $append_data .= '<h2>Directions:</h2>'."\n";
+        $append_data .= $recipe->instructions.'</div>'."\n";
         $append_data .= '</div>'."\n";
         $append_data .= '<div id="cn-recipe-nutrition">'."\n";
         $append_data .= CookingNutritiousTools::getNutritionTable($recipe);
