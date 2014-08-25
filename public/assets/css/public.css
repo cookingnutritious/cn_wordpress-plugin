@@ -9,14 +9,16 @@ div#cn-recipe-instructions {
   color: #000;
 }
 
-div#cn-recipe-instructions p {
+div#cn-recipe-instructions p, #left-area .post div#cn-recipe-instructions ol li, #left-area .post div#cn-recipe-instructions  ul li {
   color: #000;
   padding: 5px 5px 5px 15px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
-
+  -webkit-box-shadow: 5px 5px 18px -3px rgba(61,60,61,1);
+  -moz-box-shadow: 5px 5px 18px -3px rgba(61,60,61,1);
+  box-shadow: 5px 5px 18px -3px rgba(61,60,61,1);
   background: #eeeeee;
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
 }
 
 #left-area .post #cn-recipe-list ul li {
