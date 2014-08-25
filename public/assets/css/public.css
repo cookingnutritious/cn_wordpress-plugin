@@ -1,1 +1,10 @@
 /* This stylesheet is used to style the public-facing components of the plugin. */
+
+div#cn-recipe-info {
+  float: left;
+  width: 35%;
+}
+
+div#cn-recipe-nutrition {
+  
+}

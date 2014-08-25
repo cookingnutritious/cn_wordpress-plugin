@@ -1,0 +1,341 @@
+﻿<style>
+
+#left-area .performance-facts p {
+  margin: 0;
+  color: #000000;
+}
+
+#left-area .performance-facts {
+  font-size: 9pt;
+  color: #000000;
+  line-height: 1.4;
+  border: 1px solid black;
+  margin: 20px;
+  float: left;
+  width: 280px;
+  padding: 0.5rem;
+  table {
+    border-collapse: collapse;
+  }
+}
+#left-area .performance-facts__title {
+  color: #000000;
+  font-weight: bold;
+  font-family: sans-serif;
+  line-height: 1.4;
+  font-size: 14pt;
+  margin: 0 0 0.25rem 0;
+}
+#left-area .performance-facts__header {
+  color: #000000;
+  border-bottom: 10px solid black;
+  padding: 0 0 0.25rem 0;
+  margin: 0 0 0.5rem 0;
+  p {
+    color: #000000;
+    margin: 0;
+  }
+}
+#left-area .performance-facts table th, #left-area .performance-facts table td {
+   font-size: 9pt;
+   font-family: sans-serif;
+   color: #000000;
+   background-color: #ffffff;
+   border: 0;
+   padding: 1px;
+   text-align: left;
+}
+
+#left-area .performance-facts__table {
+  width: 100%;
+  thead tr {
+    th, td {
+      border: 0;
+    }
+  }
+  th, td {
+    
+    font-weight: normal;
+    text-align: left;
+    padding: 0.25rem 0;
+    border-top: 1px solid black; 
+    white-space: nowrap;
+  }
+  td {
+    color: #000000;      
+    &:last-child {
+      text-align: right;
+    }
+  }
+  .blank-cell {
+    width: 1rem;
+    border-top: 0;
+  }
+  .thick-row {
+    th, td {
+      border-top-width: 5px;
+    }
+  }
+}
+.small-info {
+  font-size: 0.7rem;
+}
+
+
+#left-area .performance-facts__table--small {
+  @extend .performance-facts__table;
+  border-bottom: 1px solid #999;
+  margin: 0 0 0.5rem 0;
+  thead {
+    tr {
+      border-bottom: 1px solid black; 
+    }
+  }
+  td {
+    &:last-child {
+      text-align: left;
+    }
+  }
+  th, td {
+    color: #000000;
+    border: 0;
+    padding: 0;
+  }
+}
+
+
+#left-area .performance-facts__table--grid {
+  @extend .performance-facts__table;
+  margin: 0 0 0.5rem 0;
+  td {
+    color: #000000;
+    &:last-child {
+      text-align: left;
+      &::before {
+        content: "•";
+        font-weight: bold;
+        margin: 0 0.25rem 0 0;
+      }
+    }
+  }
+}
+
+#left-area .text-center {
+  text-align: center;
+}
+#left-area .thick-end {
+  border-bottom: 10px solid black;
+}
+#left-area .thin-end {
+  border-bottom: 1px solid black;
+}
+</style>
+<section class="performance-facts">
+  <header class="performance-facts__header">
+    <h1 class="performance-facts__title">Nutrition Facts</h1>
+    <p>Makes __servings__ servings</p>
+  </header>
+  <table class="performance-facts__table">
+    <thead>
+      <tr>
+        <th colspan="3" class="small-info">
+          Amount Per Serving
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <b>Calories</b>
+          __calories__
+        </th>
+        <td>
+          <b>Calories from fat</b>
+          __calories_from_fat__
+        </td>
+      </tr>
+      <tr class="thick-row">
+        <th colspan="2">
+        </th>
+        <td class="small-info">
+          <b>% Daily Value*</b>
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          <b>Total Fat</b>
+          __total_fat__g
+        </th>
+        <td>
+          <b>__total_fat_pdv__</b>
+        </td>
+      </tr>
+      <tr>
+        <td class="blank-cell">
+        </td>
+        <th>
+          Saturated Fat
+          __saturated_fat__g
+        </th>
+        <td>
+          <b>__saturated_fat_pdv__</b>
+        </td>
+      </tr>
+      <tr>
+        <td class="blank-cell">
+        </td>
+        <th>
+          Trans Fat
+          __trans_fat__g
+        </th>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          <b>Cholesterol</b>
+          __cholesterol__mg
+        </th>
+        <td>
+          <b>__cholesterol_pdv__</b>
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          <b>Sodium</b>
+          __sodium__mg
+        </th>
+        <td>
+          <b>__sodium_pdv__</b>
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2">
+          <b>Total Carbohydrate</b>
+          __carbohydrate__g
+        </th>
+        <td>
+          <b>__carbohydrate_pdv__</b>
+        </td>
+      </tr>
+      <tr>
+        <td class="blank-cell">
+        </td>
+        <th>
+          Dietary Fiber
+          __fiber__g
+        </th>
+        <td>
+          <b>__fiber_pdv__</b>
+        </td>
+      </tr>
+      <tr>
+        <td class="blank-cell">
+        </td>
+        <th>
+          Sugars
+          __sugars__g
+        </th>
+        <td>
+        </td>
+      </tr>
+      <tr class="thick-end">
+        <th colspan="2">
+          <b>Protein</b>
+          __protein__g
+        </th>
+        <td>
+            <b>__protein_pdv__</b>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <table class="performance-facts__table--grid">
+    <tbody>
+      <tr>
+        <td colspan="2">
+          Vitamin A
+          __vitamin_a__%
+        </td>
+        <td>
+          Vitamin C
+          __vitamin_c__%
+        </td>
+      </tr>
+      <tr class="thin-end">
+        <td colspan="2">
+          Calcium
+          __calcium__%
+        </td>
+        <td>
+          Iron
+          __iron__%
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <p class="small-info">* Percent Daily Values are based on a 2,000 calorie diet. Your daily values may be higher or lower depending on your calorie needs:</p>
+  
+  <table class="performance-facts__table--small small-info">
+    <thead>
+      <tr>
+        <td colspan="2"></td>
+        <th>Calories:</th>
+        <th>2,000</th>
+        <th>2,500</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th colspan="2">Total Fat</th>
+        <td>Less than</td>
+        <td>65g</td>
+        <td>80g</td>
+      </tr>
+      <tr>
+        <td class="blank-cell"></td>
+        <th>Saturated Fat</th>
+        <td>Less than</td>
+        <td>20g</td>
+        <td>25g</td>
+      </tr>
+      <tr>
+        <th colspan="2">Cholesterol</th>
+        <td>Less than</td>
+        <td>300mg</td>
+        <td>300 mg</td>
+      </tr>
+      <tr>
+        <th colspan="2">Sodium</th>
+        <td>Less than</td>
+        <td>2,400mg</td>
+        <td>2,400mg</td>
+      </tr>
+      <tr>
+        <th colspan="3">Total Carbohydrate</th>
+        <td>300g</td>
+        <td>375g</td>
+      </tr>
+      <tr>
+        <td class="blank-cell"></td>
+        <th colspan="2">Dietary Fiber</th>
+        <td>25g</td>
+        <td>30g</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <p class="small-info">
+    Calories per gram:
+  </p>
+  <p class="small-info text-center">
+    Fat 9
+    &bull;
+    Carbohydrate 4
+    &bull;
+    Protein 4
+  </p>
+  
+</section>

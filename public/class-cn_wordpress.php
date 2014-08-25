@@ -23,6 +23,7 @@
  */
 
 use cookingnutritious\CookingNutritiousClient\CookingNutritiousClient;
+use cookingnutritious\CookingNutritiousClient\CookingNutritiousTools;
 
 class cn_wordpress {
 
@@ -349,6 +350,7 @@ class cn_wordpress {
     {
         $append_data = ''."\n";
         $append_data .= '<div id="cn-recipe">'."\n";
+        $append_data .= '<div id="cn-recipe-info">'."\n";
         $append_data .= '<div id="cn-recipe-instructions">'.$recipe->instructions.'</div>'."\n";
         $append_data .= '<div id="cn-recipe-list">'."\n";
         $append_data .= '<ul>'."\n";
@@ -358,6 +360,11 @@ class cn_wordpress {
         $append_data .= '</ul>'."\n";
         $append_data .= '</div>'."\n";
         $append_data .= '</div>'."\n";
+        $append_data .= '<div id="cn-recipe-nutrition">'."\n";
+        $append_data .= CookingNutritiousTools::getNutritionTable($recipe);
+        $append_data .= '</div>'."\n";
+        $append_data .= '</div>'."\n";
+        
         return $append_data;
     }
 
