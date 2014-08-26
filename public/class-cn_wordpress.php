@@ -330,7 +330,7 @@ class cn_wordpress {
 	 */
 	function api_content_transform($content) {
 		global $wpdb;
-        $token = '35f4d181b311abb4a0b6b435cf47cdd663674708';
+        $token = get_option( 'cn_api_token' );
         $post_id = $GLOBALS['post']->ID;
         $table_name = $wpdb->prefix . "cn_wordpress";
         $row = $wpdb->get_row("SELECT * FROM $table_name WHERE post = $post_id");

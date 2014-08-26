@@ -90,7 +90,7 @@ class cn_wordpress_Admin {
 		 */
 		add_action ( 'edit_form_advanced', array( $this, 'advanced_add_api_input'));
         add_action ( 'save_post', array( $this, 'save_post_api'));
-		add_filter( '@TODO', array( $this, 'filter_method_name' ) );
+		#add_filter( '@TODO', array( $this, 'filter_method_name' ) );
 
 	}
 
@@ -190,8 +190,8 @@ class cn_wordpress_Admin {
 		 *   For reference: http://codex.wordpress.org/Roles_and_Capabilities
 		 */
 		$this->plugin_screen_hook_suffix = add_options_page(
-			__( 'Page Title', $this->plugin_slug ),
-			__( 'Menu Text', $this->plugin_slug ),
+			__( 'Cooking Nutritious Options', $this->plugin_slug ),
+			__( 'CN Wordpress', $this->plugin_slug ),
 			'manage_options',
 			$this->plugin_slug,
 			array( $this, 'display_plugin_admin_page' )
@@ -205,7 +205,14 @@ class cn_wordpress_Admin {
 	 * @since    1.0.0
 	 */
 	public function display_plugin_admin_page() {
-		include_once( 'views/admin.php' );
+        if ( !current_user_can( 'manage_options' ) )  {
+            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
+        }
+        
+        $api_token = (isset($_POST['api_token']) && $_POST[ 'do_cn_options' ] == 'Y') ? $_POST['api_token'] : get_option( 'cn_api_token' );
+		
+        update_option('cn_api_token', $api_token );
+        include_once( 'views/admin.php' );
 	}
 
 	/**
