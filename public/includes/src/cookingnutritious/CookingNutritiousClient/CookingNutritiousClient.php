@@ -41,7 +41,9 @@ class CookingNutritiousClient
     {
         $cn = new CookingNutritiousObj;
         $cn->setClient($this);
-
+        if (!function_exists('curl_init')) {
+            throw new \Exception('PHP curl extension not available in this environment ');
+        }
         $handle = @curl_init($this->uri);
 
         $timeout = CN_API_TIMEOUT;

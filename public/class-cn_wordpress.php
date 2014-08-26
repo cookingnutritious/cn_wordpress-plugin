@@ -334,7 +334,7 @@ class cn_wordpress {
         $post_id = $GLOBALS['post']->ID;
         $table_name = $wpdb->prefix . "cn_wordpress";
         $row = $wpdb->get_row("SELECT * FROM $table_name WHERE post = $post_id");
-        if (NULL !== $row) {
+        if ((NULL !== $row) && ($row->url !== "")) {
             $api_url = $row->url;
             $client = new CookingNutritiousClient($token);
             $cn = $client->requestGet($api_url);
