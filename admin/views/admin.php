@@ -24,6 +24,28 @@
         <input type="text" name="api_token" value="<?php echo $api_token; ?>" size="20">
         </p><hr />
 
+        <p>
+            <input type="checkbox" name="use_parent_category" 
+            <?php if ($use_parent_category) echo "checked"; ?>
+             value="true">Use parent category for all recipe posts<br>
+        </p>
+
+        <p><?php _e("Parent Category:", 'menu-test' ); ?> 
+            <input type="text" name="parent_category" value="<?php echo $parent_category; ?>" size="20">
+        </p><hr />
+
+        <p>
+            <input type="checkbox" name="category" 
+            <?php if ($category) echo "checked"; ?>
+             value="true">Automatically set the post category<br>
+        </p></hr>
+
+        <p>
+            <input type="checkbox" name="tags" 
+            <?php if ($tags) echo "checked"; ?>
+             value="true">Automatically add tags to posts<br>
+        </p></hr>
+
         <p class="submit">
         <input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes') ?>" />
         </p>

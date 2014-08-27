@@ -8,6 +8,9 @@
  * @link      http://cookingnutritious.com
  * @copyright 2014 Jesse Greathouse @cookingnutritious.com
  */
+ 
+use cookingnutritious\CookingNutritiousClient\CookingNutritiousClient;
+use cookingnutritious\CookingNutritiousClient\CookingNutritiousTools;
 
 /**
  * Plugin class. This class should ideally be used to work with the
@@ -210,8 +213,20 @@ class cn_wordpress_Admin {
         }
         
         $api_token = (isset($_POST['api_token']) && $_POST[ 'do_cn_options' ] == 'Y') ? $_POST['api_token'] : get_option( 'cn_api_token' );
-		
-        update_option('cn_api_token', $api_token );
+		update_option('cn_api_token', $api_token );
+        
+        $use_parent_category = (isset($_POST['use_parent_category']) && $_POST[ 'do_cn_options' ] == 'Y') ? $_POST['use_parent_category'] : get_option( 'use_parent_category' );
+        update_option('use_parent_category', $use_parent_category );
+        
+        $parent_category = (isset($_POST['parent_category']) && $_POST[ 'do_cn_options' ] == 'Y') ? $_POST['parent_category'] : get_option( 'parent_category' );
+        update_option('parent_category', $parent_category );
+        
+        $category = (isset($_POST['category']) && $_POST[ 'do_cn_options' ] == 'Y') ? $_POST['category'] : get_option( 'category' );
+        update_option('category', $category );
+        
+        $tags = (isset($_POST['tags']) && $_POST[ 'do_cn_options' ] == 'Y') ? $_POST['tags'] : get_option( 'tags' );
+        update_option('tags', $tags );
+        
         include_once( 'views/admin.php' );
 	}
 
@@ -363,7 +378,54 @@ class cn_wordpress_Admin {
                            array('url' => $api_url, 
                                  'post' => $post_id));
             }
+            
+            $parent_category = 0;
+            if ((true == get_option('use_parent_category')) && ("" != get_option('parent_category'))) {
+                $parent_category = get_option('parent_category');
+                $category = self::create_category_if_not_exists($parent_category);
+                //var_dump($parent_category); die();
+                wp_set_post_categories( $post_id, $category->term_id);
+            }
+            
+            //call the api and add appropriate category and tags.
+            $client = new CookingNutritiousClient(get_option('cn_api_token'));
+            $cn = $client->requestGet($api_url);
+            if ($cn->getCode() == 200) {
+                $response = $cn->getResponse();
+                //if the options elect to set the category automatically
+                if ((true == get_option('category')) && ($response->meal_category != "")) { 
+                    $category = self::create_category_if_not_exists($response->meal_category, $parent_category);
+                    wp_set_post_categories( $post_id, $category->term_id, true);
+                }
+                
+                //if the options elect to set the tags automatically
+                if ((true == get_option('tags')) && (count($response->tags) > 0)) {
+                    $tags = array();
+                    foreach($response->tags as $tag) {
+                        //$tags[] = create_tag_if_not_exists($tag);
+                        $tags[] = $tag;
+                        
+                    }
+                    wp_set_post_tags($post_id, implode(",", $tags), true);
+                }
+            }
         }
+    }
+    
+    public static function create_category_if_not_exists($name, $parent_category = 0) {
+        if (!($category = get_term_by('name', $name, 'category'))) {
+            $category = wp_create_category($name, $parent_category);
+        }
+        
+        return $category; 
+    }
+    
+    public static function create_tag_if_not_exists($name) {
+        if (!($tag = get_term_by('name', $name, 'post_tag'))) {
+            $tag = wp_create_tag($name);
+        }
+        
+        return $tag; 
     }
  
 
